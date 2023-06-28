@@ -22,3 +22,11 @@ jobs:
      - run: make test
 
      - run: make lint
+
+     - name: Test & publish code coverage
+       uses: paambaati/codeclimate-action@v4.0.0
+       env:
+        CC_TEST_REPORTER_ID: <TESTCOVERAGE>
+       with:
+        coverageCommand: npm run coverage
+     
