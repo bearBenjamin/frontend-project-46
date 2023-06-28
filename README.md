@@ -4,4 +4,5 @@
 
 
 [![asciicast](https://asciinema.org/a/592773.svg)](https://asciinema.org/a/592773)
+
 *An example of the operation of the "Difference Calculator"*
