@@ -11,4 +11,4 @@ lint:
 	npx eslint .
 
 test:
-	npm test
+	npm run test
