@@ -3,30 +3,25 @@ name: start test and lint
 on: push
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
-
-
     steps:
-     - uses: actions/checkout@v3
-     - uses: actions/setup-node@v3
-       with:
-         node-version: 18
-         cache: 'npm'
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
 
-     - run: make install
-     
-     - run: make test
+      - run: make install
 
-     - run: make lint
+      - run: make test
 
-     - name: Test & publish code coverage
-       uses: paambaati/codeclimate-action@v4.0.0
-       env:
-        CC_TEST_REPORTER_ID: <TESTCOVERAGE>
-       with:
-        coverageCommand: npm run coverage
-     
+      - run: make lint
+
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v4.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.TESTCOVERAGE }}
+        with:
+          coverageCommand: make test-coverage
