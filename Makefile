@@ -14,4 +14,4 @@ test:
 	npm run test
 
 test-coverage:
-	npm test
+	npm test -- --coverage --coverageProvider=v8
