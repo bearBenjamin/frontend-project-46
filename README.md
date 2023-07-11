@@ -31,3 +31,6 @@
 [![asciicast](https://asciinema.org/a/596176.svg)](https://asciinema.org/a/596176)
 
 *An example of the operation of the "Difference Calculator" package. Finding differences between two json and two yml files. JSON format.*
+
+
+**Educational project within the framework of teaching the profession "Front-end developer" at the Hexlet programming school**
