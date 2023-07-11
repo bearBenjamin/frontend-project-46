@@ -1,49 +1,24 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
+import _ from 'lodash';
+
 const stringify = (value, depth) => {
-  if (typeof value === 'object' && value !== null) {
-    const objectProperties = Object.keys(value).map((key) => {
-      if (typeof value === 'object') {
-        const result = `"${key}":${stringify(value[key], depth + 1)}`;
-        return result;
-      }
-      const result = `"${key}":"${value[key]}"`;
-      return result;
-    });
-    const str = `{\n${objectProperties.join(',')}}`;
-    // console.log('str: ', str)
-    return `${str}`;
-  }
-  if (typeof value === 'string') {
-    return `"${value}"`;
-  }
-  return `"${value}"`;
+  if (!_.isObject(value)) return `"${value}"`;
+  const objectProperties = Object.keys(value).map((key) => {
+    if (_.isObject(value)) return `"${key}":${stringify(value[key], depth + 1)}`;
+    return `"${key}":"${value[key]}"`;
+  });
+  return `{\n${objectProperties.join(',')}}`;
 };
 
 const getJsonFormat = (treeObject, depth = 1) => {
   const iter = (node) => {
     const keys = node.map((key) => {
-      if (key.type === 'node') {
-        const resultStr = `"${key.key}":${iter(key.children, depth + 1)}`;
-        // console.log('node: ', resultStr)
-        return resultStr;
-      }
-      if (key.type === 'delete') {
-        const resultStr = `"-${key.key}":${stringify(key.value1)}`;
-        return resultStr;
-      }
-      if (key.type === 'changed') {
-        const resultStr = `"-${key.key}":${stringify(key.value1)},"+${key.key}":${stringify(key.value2)}`;
-        return resultStr;
-      }
-      if (key.type === 'added') {
-        const resultStr = `"+${key.key}":${stringify(key.value2)}`;
-        return resultStr;
-      }
-      if (key.type === 'unchanged') {
-        const resultStr = `"${key.key}":${stringify(key.value1)}`;
-        return resultStr;
-      }
+      if (key.type === 'node') return `"${key.key}":${iter(key.children, depth + 1)}`;
+      if (key.type === 'delete') return `"-${key.key}":${stringify(key.value1)}`;
+      if (key.type === 'changed') return `"-${key.key}":${stringify(key.value1)},"+${key.key}":${stringify(key.value2)}`;
+      if (key.type === 'added') return `"+${key.key}":${stringify(key.value2)}`;
+      if (key.type === 'unchanged') return `"${key.key}":${stringify(key.value1)}`;
     });
     return `{${keys.join(',')}}`;
   };
