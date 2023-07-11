@@ -7,26 +7,12 @@ const getTreeObject = (obj1, obj2) => {
   const keys = _.sortBy(keys3);
 
   const treeObject = keys.map((key) => {
-    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-      const result = { type: 'node', key, children: getTreeObject(obj1[key], obj2[key]) };
-      return result;
-    }
-    if (!_.has(obj1, key)) {
-      const result = { type: 'added', key, value2: obj2[key] };
-      return result;
-    }
-    if (!_.has(obj2, key)) {
-      const result = { type: 'delete', key, value1: obj1[key] };
-      return result;
-    }
-    if (obj1[key] !== obj2[key]) {
-      const result = {
-        type: 'changed', key, value1: obj1[key], value2: obj2[key],
-      };
-      return result;
-    }
-    const result = { type: 'unchanged', key, value1: obj2[key] };
-    return result;
+    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) return { type: 'node', key, children: getTreeObject(obj1[key], obj2[key]) };
+    if (!_.has(obj1, key)) return { type: 'added', key, value2: obj2[key] };
+    if (!_.has(obj2, key)) return { type: 'delete', key, value1: obj1[key] };
+    // eslint-disable-next-line object-curly-newline
+    if (obj1[key] !== obj2[key]) return { type: 'changed', key, value1: obj1[key], value2: obj2[key] };
+    return { type: 'unchanged', key, value1: obj2[key] };
   });
   return treeObject;
 };
