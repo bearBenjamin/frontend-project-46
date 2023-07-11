@@ -1,5 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
+import _ from 'lodash';
+
 const indentsFormater = (item) => {
   const replacer = '..';
   const spaceCount = 1;
@@ -15,19 +17,15 @@ const indentsFormater = (item) => {
 const stringify = (value, depth) => {
   const indents = indentsFormater(depth);
   const { numberIndents, closeBrace } = indents;
-  if (typeof value === 'object' && value !== null) {
-    const objectProperties = Object.keys(value).map((key) => {
-      if (typeof value === 'object') {
-        const result = `${numberIndents}${key}: ${stringify(value[key], depth + 1)}`;
-        return result;
-      }
-      const result = `${numberIndents}${key}: ${value[key]}`;
-      return result;
-    });
 
-    const str = `{\n${objectProperties.join('\n')}\n${closeBrace}}`;
-    return `${str}`;
-  } return String(value);
+  if (!_.isObject(value)) return `${value}`;
+
+  const objectProperties = Object.keys(value).map((key) => {
+    if (_.isObject(value)) return `${numberIndents}${key}: ${stringify(value[key], depth + 1)}`;
+    return `${numberIndents}${key}: ${value[key]}`;
+  });
+
+  return `{\n${objectProperties.join('\n')}\n${closeBrace}}`;
 };
 
 const getDiffTreeObject = (treeObject, depth = 1) => {
@@ -35,26 +33,11 @@ const getDiffTreeObject = (treeObject, depth = 1) => {
   const { numberIndents, closeBrace } = indents;
 
   const keys = treeObject.map((key) => {
-    if (key.type === 'node') {
-      const resultStr = `${numberIndents}${key.key}: ${getDiffTreeObject(key.children, depth + 1)}`;
-      return resultStr;
-    }
-    if (key.type === 'delete') {
-      const resultStr = `${numberIndents}- ${key.key}: ${stringify(key.value1, depth + 1)}`;
-      return resultStr;
-    }
-    if (key.type === 'unchanged') {
-      const resultStr = `${numberIndents}  ${key.key}: ${stringify(key.value1, depth + 1)}`;
-      return resultStr;
-    }
-    if (key.type === 'changed') {
-      const resultStr = `${numberIndents}- ${key.key}: ${stringify(key.value1, depth + 1)}\n${numberIndents}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
-      return resultStr;
-    }
-    if (key.type === 'added') {
-      const resultStr = `${numberIndents}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
-      return resultStr;
-    }
+    if (key.type === 'node') return `${numberIndents}${key.key}: ${getDiffTreeObject(key.children, depth + 1)}`;
+    if (key.type === 'delete') return `${numberIndents}- ${key.key}: ${stringify(key.value1, depth + 1)}`;
+    if (key.type === 'unchanged') return `${numberIndents}  ${key.key}: ${stringify(key.value1, depth + 1)}`;
+    if (key.type === 'changed') return `${numberIndents}- ${key.key}: ${stringify(key.value1, depth + 1)}\n${numberIndents}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
+    if (key.type === 'added') return `${numberIndents}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
   });
   return `{\n${keys.join('\n')}\n${closeBrace}}`;
 };
