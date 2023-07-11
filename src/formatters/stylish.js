@@ -11,12 +11,12 @@ const indentsFormater = (item) => {
     numberIndents: replacer.repeat(indent),
     closeBrace: replacer.repeat(indentCloseBrace),
   };
-  return indents;
+  const { numberIndents, closeBrace } = indents;
+  return [numberIndents, closeBrace];
 };
 
 const stringify = (value, depth) => {
-  const indents = indentsFormater(depth);
-  const { numberIndents, closeBrace } = indents;
+  const [numberIndents, closeBrace] = indentsFormater(depth);
 
   if (!_.isObject(value)) return `${value}`;
 
@@ -24,13 +24,11 @@ const stringify = (value, depth) => {
     if (_.isObject(value)) return `${numberIndents}${key}: ${stringify(value[key], depth + 1)}`;
     return `${numberIndents}${key}: ${value[key]}`;
   });
-
   return `{\n${objectProperties.join('\n')}\n${closeBrace}}`;
 };
 
 const getDiffTreeObject = (treeObject, depth = 1) => {
-  const indents = indentsFormater(depth);
-  const { numberIndents, closeBrace } = indents;
+  const [numberIndents, closeBrace] = indentsFormater(depth);
 
   const keys = treeObject.map((key) => {
     if (key.type === 'node') return `${numberIndents}${key.key}: ${getDiffTreeObject(key.children, depth + 1)}`;
