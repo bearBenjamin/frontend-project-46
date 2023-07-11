@@ -1,7 +1,7 @@
 import readFile from './src/readFile.js';
 import fileExtension from './src/parse.js';
 import getTreeObject from './src/fileDiff.js';
-import getFormatResult from './src/formatters/resultFormat.js';
+import getFormatResult from './src/formatters/index.js';
 
 const getDiff = (filepath1, filepath2, format) => {
   const dataFile1 = readFile(filepath1);

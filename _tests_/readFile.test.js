@@ -23,9 +23,14 @@ test('readFile file2.json', () => {
   expect(readContent).toEqual(readFile(filename));
 });
 
-test('getDiff', () => {
+test('getDiff stylish', () => {
   const fileDiff = getDiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'stylish');
   expect(fileDiff).toEqual(readFile('expected.txt'));
+});
+
+test('getDiff plain', () => {
+  const fileDiff = getDiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'plain');
+  expect(fileDiff).toEqual(readFile('plain.txt'));
 });
 
 test('readFile filepath1.yml', () => {
@@ -40,7 +45,22 @@ test('readFile filepath2.yml', () => {
   expect(readContent).toEqual(readFile(filename));
 });
 
-test('genDiff .yml and .yml', () => {
+test('genDiff .yml and .yml stylish', () => {
   const fileDiff = getDiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'stylish');
   expect(fileDiff).toEqual(readFile('expected.txt'));
+});
+
+test('genDiff .yml and .yml plain', () => {
+  const fileDiff = getDiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'plain');
+  expect(fileDiff).toEqual(readFile('plain.txt'));
+});
+
+test('getDiff plain', () => {
+  const fileDiff = getDiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'json');
+  expect(fileDiff).toEqual(readFile('json.txt'));
+});
+
+test('genDiff .yml and .yml plain', () => {
+  const fileDiff = getDiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'json');
+  expect(fileDiff).toEqual(readFile('json.txt'));
 });
