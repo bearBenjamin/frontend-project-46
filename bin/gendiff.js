@@ -13,7 +13,7 @@ program
   .arguments('<filepath1> <filepath2> [formatName]')
   .option('-f, --format <type>', 'add the specified type of format', 'stylish')
   .action((filepath1, filepath2, formatName) => {
-    if (formatName === undefined) {
+    if (formatName === 'undefined') {
       console.log(getDiff(filepath1, filepath2, program.opts().format));
     }
     if (formatName === 'stylish') {
