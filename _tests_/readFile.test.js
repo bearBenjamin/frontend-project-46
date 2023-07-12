@@ -11,8 +11,9 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '_fixtures_', fi
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 test('readFile file1.json', () => {
-  const readContent = content('./_fixtures_/file1.json');
   const filename = 'file1.json';
+  const pathMy = getFixturePath(filename);
+  const readContent = content(pathMy);
   expect(readContent).toEqual(readFile(filename));
 });
 
@@ -39,8 +40,9 @@ test('readFile filepath1.yml', () => {
 });
 
 test('readFile filepath2.yml', () => {
-  const readContent = content('./_fixtures_/filepath2.yml');
   const filename = 'filepath2.yml';
+  const pathMy = getFixturePath(filename);
+  const readContent = content(pathMy);
   expect(readContent).toEqual(readFile(filename));
 });
 
