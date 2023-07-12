@@ -3,7 +3,7 @@
 import _ from 'lodash';
 
 const indentsFormater = (item) => {
-  const replacer = '   ';
+  const replacer = '..';
   const spaceCount = 1;
   const indent = spaceCount * item;
   const indentCloseBrace = indent - spaceCount;

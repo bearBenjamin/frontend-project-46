@@ -1,4 +1,5 @@
-import YAML from 'yaml';
+// import YAML from 'yaml';
+import yaml from 'js-yaml';
 
 const fileExtension = (filepath, data) => {
   const extension = filepath.split('.');
@@ -7,7 +8,7 @@ const fileExtension = (filepath, data) => {
     return obj;
   }
   if (extension[extension.length - 1] === 'yml' || extension[extension.length - 1] === 'yaml') {
-    const obj = YAML.parse(data);
+    const obj = yaml.load(data);
     return obj;
   }
   return (`"Ошибка. Файлы с расширением" ${extension[extension.length - 1]} "не поддерживаются"`);
