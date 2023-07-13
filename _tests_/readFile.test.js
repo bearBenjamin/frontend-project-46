@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import content from '../src/readFile.js';
-import getDiff from '../index.js';
+import gendiff from '../index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,12 +24,12 @@ test('readFile file2.json', () => {
 });
 
 test('getDiff stylish', () => {
-  const fileDiff = getDiff('./_fixtures_/file3.json', './_fixtures_/file4.json', 'stylish');
+  const fileDiff = gendiff('./_fixtures_/file3.json', './_fixtures_/file4.json', 'stylish');
   expect(fileDiff).toEqual(readFile('expected2.txt'));
 });
 
 test('getDiff plain', () => {
-  const fileDiff = getDiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'plain');
+  const fileDiff = gendiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'plain');
   expect(fileDiff).toEqual(readFile('plain.txt'));
 });
 
@@ -47,21 +47,21 @@ test('readFile filepath2.yml', () => {
 });
 
 test('genDiff .yml and .yml stylish', () => {
-  const fileDiff = getDiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'stylish');
+  const fileDiff = gendiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'stylish');
   expect(fileDiff).toEqual(readFile('expected.txt'));
 });
 
 test('genDiff .yml and .yml plain', () => {
-  const fileDiff = getDiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'plain');
+  const fileDiff = gendiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'plain');
   expect(fileDiff).toEqual(readFile('plain.txt'));
 });
 
 test('getDiff plain', () => {
-  const fileDiff = getDiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'json');
+  const fileDiff = gendiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'json');
   expect(fileDiff).toEqual(readFile('json.txt'));
 });
 
 test('genDiff .yml and .yml plain', () => {
-  const fileDiff = getDiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'json');
+  const fileDiff = gendiff('./_fixtures_/filepath1.yml', './_fixtures_/filepath2.yml', 'json');
   expect(fileDiff).toEqual(readFile('json.txt'));
 });
