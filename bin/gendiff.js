@@ -3,9 +3,9 @@
 import { Command } from 'commander';
 import getDiff from '../index.js';
 
-const program = new Command();
+const genDiff = new Command();
 
-program
+genDiff
   .name('gendiff')
   .description('Compares two configuration files and shows a difference.')
   .version('1.0.0', '-V, --version', 'output the version number')
@@ -16,4 +16,4 @@ program
     console.log(getDiff(filepath1, filepath2, options));
   });
 
-program.parse();
+genDiff.parse();
