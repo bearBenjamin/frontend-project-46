@@ -56,7 +56,7 @@ test('genDiff .yml and .yml plain', () => {
   expect(fileDiff).toEqual(readFile('plain.txt'));
 });
 
-test('getDiff plain', () => {
+test('getDiff json', () => {
   const fileDiff = gendiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'json');
   expect(fileDiff).toEqual(readFile('json.txt'));
 });
