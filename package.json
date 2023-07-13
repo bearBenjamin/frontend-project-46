@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Educational project Difference calculator",
   "bin": {
-    "bin - gendiff": "bin/gendiff.js"
+    "gendiff": "bin/gendiff.js"
   },
   "main": "index.js",
   "scripts": {

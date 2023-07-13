@@ -24,8 +24,8 @@ test('readFile file2.json', () => {
 });
 
 test('getDiff stylish', () => {
-  const fileDiff = getDiff('./_fixtures_/file1.json', './_fixtures_/file2.json', 'stylish');
-  expect(fileDiff).toEqual(readFile('expected.txt'));
+  const fileDiff = getDiff('./_fixtures_/file3.json', './_fixtures_/file4.json', 'stylish');
+  expect(fileDiff).toEqual(readFile('expected2.txt'));
 });
 
 test('getDiff plain', () => {
