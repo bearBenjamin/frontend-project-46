@@ -33,10 +33,11 @@
 *An example of the operation of the "Difference Calculator" package. Finding differences between two json and two yml files. JSON format.*
 
 
-**Educational project within the framework of teaching the profession "Front-end developer" at the Hexlet programming school**
-
 ## User's Manual
 1. *Install Node.js. This can be done according to the [instructions](https://github.com/Hexlet/ru-instructions/blob/main/nodejs.md)*
 
 2. *Clone the repository to your computer. This can be done with the git clone command.*
 3. *Run the make install command to install the dependencies.*
+
+
+**Educational project within the framework of teaching the profession "Front-end developer" at the Hexlet programming school**
