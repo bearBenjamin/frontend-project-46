@@ -1,20 +1,20 @@
 import _ from 'lodash';
 
-const getTreeObject = (obj1, obj2) => {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
+const buildTree = (data1, data2) => {
+  const keys1 = Object.keys(data1);
+  const keys2 = Object.keys(data2);
   const keys3 = _.union(keys1, keys2);
   const keys = _.sortBy(keys3);
 
-  const treeObject = keys.map((key) => {
-    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) return { type: 'node', key, children: getTreeObject(obj1[key], obj2[key]) };
-    if (!_.has(obj1, key)) return { type: 'added', key, value2: obj2[key] };
-    if (!_.has(obj2, key)) return { type: 'delete', key, value1: obj1[key] };
+  const diff = keys.map((key) => {
+    if (_.isObject(data1[key]) && _.isObject(data2[key])) return { type: 'node', key, children: buildTree(data1[key], data2[key]) };
+    if (!_.has(data1, key)) return { type: 'added', key, value2: data2[key] };
+    if (!_.has(data2, key)) return { type: 'delete', key, value1: data1[key] };
     // eslint-disable-next-line object-curly-newline
-    if (obj1[key] !== obj2[key]) return { type: 'changed', key, value1: obj1[key], value2: obj2[key] };
-    return { type: 'unchanged', key, value1: obj2[key] };
+    if (data1[key] !== data2[key]) return { type: 'changed', key, value1: data1[key], value2: data2[key] };
+    return { type: 'unchanged', key, value1: data2[key] };
   });
-  return treeObject;
+  return diff;
 };
 
-export default getTreeObject;
+export default buildTree;

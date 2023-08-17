@@ -11,7 +11,7 @@ const stringify = (value, depth) => {
   return `{\n${objectProperties.join(',')}}`;
 };
 
-const getJsonFormat = (treeObject, depth = 1) => {
+const getJsonFormat = (diff, depth = 1) => {
   const iter = (node) => {
     const keys = node.map((key) => {
       if (key.type === 'node') return `"${key.key}":${iter(key.children, depth + 1)}`;
@@ -22,7 +22,7 @@ const getJsonFormat = (treeObject, depth = 1) => {
     });
     return `{${keys.join(',')}}`;
   };
-  return iter(treeObject);
+  return iter(diff);
 };
 
 export default getJsonFormat;

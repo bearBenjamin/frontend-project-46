@@ -8,7 +8,7 @@ const stringify = (value) => {
   return value;
 };
 
-const getPlainFormat = (treeObject) => {
+const getPlainFormat = (diff) => {
   const iter = (node, parents) => {
     const keys = node.flatMap((key) => {
       const parent = [...parents, `${key.key}`];
@@ -21,7 +21,7 @@ const getPlainFormat = (treeObject) => {
     });
     return `${keys.join('\n')}`;
   };
-  return iter(treeObject, []);
+  return iter(diff, []);
 };
 
 export default getPlainFormat;
