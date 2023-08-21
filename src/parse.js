@@ -1,17 +1,20 @@
 // import YAML from 'yaml';
 import yaml from 'js-yaml';
 
-const parse = (filepath, data) => {
-  const extension = filepath.split('.');
-  if (extension[extension.length - 1] === 'json') {
-    const result = JSON.parse(data);
-    return result;
+const parse = (extension, data) => {
+  switch (extension) {
+    case '.json': {
+      const result = JSON.parse(data);
+      return result;
+    }
+    case '.yml':
+    case '.yaml': {
+      const result = yaml.load(data);
+      return result;
+    }
+    default:
+      throw new Error(`'Ошибка. Файлы с расширением '${extension}' не поддерживаются'`);
   }
-  if (extension[extension.length - 1] === 'yml' || extension[extension.length - 1] === 'yaml') {
-    const result = yaml.load(data);
-    return result;
-  }
-  return (`"Ошибка. Файлы с расширением" ${extension[extension.length - 1]} "не поддерживаются"`);
 };
 
 export default parse;
