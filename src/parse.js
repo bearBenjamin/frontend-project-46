@@ -1,19 +1,17 @@
 // import YAML from 'yaml';
 import yaml from 'js-yaml';
 
-const parse = (extension, data) => {
-  switch (extension) {
-    case '.json': {
-      const result = JSON.parse(data);
-      return result;
+const parse = (format, data) => {
+  switch (format) {
+    case 'json': {
+      return JSON.parse(data);
     }
-    case '.yml':
-    case '.yaml': {
-      const result = yaml.load(data);
-      return result;
+    case 'yml':
+    case 'yaml': {
+      return yaml.load(data);
     }
     default:
-      throw new Error(`'Ошибка. Файлы с расширением '${extension}' не поддерживаются'`);
+      throw new Error(`'Ошибка. Файлы с расширением '${format}' не поддерживаются'`);
   }
 };
 

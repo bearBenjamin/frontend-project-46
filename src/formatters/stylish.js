@@ -34,10 +34,10 @@ const getStylishFormat = (diff, depth = 1) => {
 
   const keys = diff.map((key) => {
     if (key.type === 'node') return `${numberIndents}  ${key.key}: ${getStylishFormat(key.children, depth + 1)}`;
-    if (key.type === 'delete') return `${numberIndents}- ${key.key}: ${stringify(key.value1, depth + 1)}`;
-    if (key.type === 'unchanged') return `${numberIndents}  ${key.key}: ${stringify(key.value1, depth + 1)}`;
+    if (key.type === 'delete') return `${numberIndents}- ${key.key}: ${stringify(key.value, depth + 1)}`;
+    if (key.type === 'unchanged') return `${numberIndents}  ${key.key}: ${stringify(key.value, depth + 1)}`;
     if (key.type === 'changed') return `${numberIndents}- ${key.key}: ${stringify(key.value1, depth + 1)}\n${numberIndents}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
-    if (key.type === 'added') return `${numberIndents}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
+    if (key.type === 'added') return `${numberIndents}+ ${key.key}: ${stringify(key.value, depth + 1)}`;
   });
   return `{\n${keys.join('\n')}\n${closeBrace}}`;
 };

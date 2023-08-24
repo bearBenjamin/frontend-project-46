@@ -16,7 +16,7 @@ const getPlainFormat = (diff) => {
       if (key.type === 'node') return `${iter(key.children, parent)}`;
       if (key.type === 'delete') return `Property '${pathNameKey}' was removed`;
       if (key.type === 'changed') return `Property '${pathNameKey}' was updated. From ${stringify(key.value1)} to ${stringify(key.value2)}`;
-      if (key.type === 'added') return `Property '${pathNameKey}' was added with value: ${stringify(key.value2)}`;
+      if (key.type === 'added') return `Property '${pathNameKey}' was added with value: ${stringify(key.value)}`;
       if (key.type === 'unchanged') return [];
     });
     return `${keys.join('\n')}`;

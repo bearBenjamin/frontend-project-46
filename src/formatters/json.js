@@ -15,10 +15,10 @@ const getJsonFormat = (diff, depth = 1) => {
   const iter = (node) => {
     const keys = node.map((key) => {
       if (key.type === 'node') return `"${key.key}":${iter(key.children, depth + 1)}`;
-      if (key.type === 'delete') return `"-${key.key}":${stringify(key.value1)}`;
+      if (key.type === 'delete') return `"-${key.key}":${stringify(key.value)}`;
       if (key.type === 'changed') return `"-${key.key}":${stringify(key.value1)},"+${key.key}":${stringify(key.value2)}`;
-      if (key.type === 'added') return `"+${key.key}":${stringify(key.value2)}`;
-      if (key.type === 'unchanged') return `"${key.key}":${stringify(key.value1)}`;
+      if (key.type === 'added') return `"+${key.key}":${stringify(key.value)}`;
+      if (key.type === 'unchanged') return `"${key.key}":${stringify(key.value)}`;
     });
     return `{${keys.join(',')}}`;
   };
