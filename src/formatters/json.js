@@ -14,11 +14,25 @@ const stringify = (value, depth) => {
 const getJsonFormat = (diff, depth = 1) => {
   const iter = (node) => {
     const keys = node.map((key) => {
-      if (key.type === 'node') return `"${key.key}":${iter(key.children, depth + 1)}`;
-      if (key.type === 'delete') return `"-${key.key}":${stringify(key.value)}`;
-      if (key.type === 'changed') return `"-${key.key}":${stringify(key.value1)},"+${key.key}":${stringify(key.value2)}`;
-      if (key.type === 'added') return `"+${key.key}":${stringify(key.value)}`;
-      if (key.type === 'unchanged') return `"${key.key}":${stringify(key.value)}`;
+      switch (key.type) {
+        case 'node': {
+          return `"${key.key}":${iter(key.children, depth + 1)}`;
+        }
+        case 'delete': {
+          return `"-${key.key}":${stringify(key.value)}`;
+        }
+        case 'changed': {
+          return `"-${key.key}":${stringify(key.value1)},"+${key.key}":${stringify(key.value2)}`;
+        }
+        case 'added': {
+          return `"+${key.key}":${stringify(key.value)}`;
+        }
+        case 'unchanged': {
+          return `"${key.key}":${stringify(key.value)}`;
+        }
+        default:
+          return null;
+      }
     });
     return `{${keys.join(',')}}`;
   };
