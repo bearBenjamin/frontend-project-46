@@ -5,6 +5,8 @@ import _ from 'lodash';
 const replacer = '  ';
 const spaceCount = 2;
 
+const indent = (depth) => " ".repeat(spaceCount * depth - 2);
+
 const retreat = (depth) => {
   const indent = spaceCount * depth;
   const indentCloseBrace = indent - spaceCount;
@@ -21,33 +23,33 @@ const retreat = (depth) => {
 const stringify = (value, depth) => {
   const [numberIndents, closeBrace] = retreat(depth);
 
-  if (!_.isObject(value)) return `${value}`;
+  if (!_.isObject(value)) return String(value);
 
-  const objectProperties = Object.keys(value).map((key) => `${numberIndents}  ${key}: ${stringify(value[key], depth + 1)}`);
-  return `{\n${objectProperties.join('\n')}\n${closeBrace}}`;
+  const objectProperties = Object.keys(value).map((key) => `${indent(depth + 1)}  ${key}: ${stringify(value[key], depth + 1)}`);
+  return `{\n${objectProperties.join('\n')}\n${indent(depth)}  }`;
 };
 
 const getStylishFormat = (diff, depth = 1) => {
   const [numberIndents, closeBrace] = retreat(depth);
 
-  const keys = diff.map((key) => {
-    switch (key.type) {
+  const keys = diff.map((node) => {
+    switch (node.type) {
       case 'node': {
-        return `${numberIndents}  ${key.key}: ${getStylishFormat(key.children, depth + 1)}`;
+        return `${indent(depth)}  ${node.key}: ${getStylishFormat(node.children, depth + 1)}`;
       }
       case 'delete': {
-        return `${numberIndents}- ${key.key}: ${stringify(key.value, depth + 1)}`;
+        return `${indent(depth)}- ${node.key}: ${stringify(node.value, depth)}`;
       }
       case 'unchanged': {
-        return `${numberIndents}  ${key.key}: ${stringify(key.value, depth + 1)}`;
+        return `${indent(depth)}  ${node.key}: ${stringify(node.value, depth)}`;
       }
       case 'changed': {
-        const line1 = `${numberIndents}- ${key.key}: ${stringify(key.value1, depth + 1)}`;
-        const line2 = `${numberIndents}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
+        const line1 = `${indent(depth)}- ${node.key}: ${stringify(node.value1, depth)}`;
+        const line2 = `${indent(depth)}+ ${node.key}: ${stringify(node.value2, depth)}`;
         return `${line1}\n${line2}`;
       }
       case 'added': {
-        return `${numberIndents}+ ${key.key}: ${stringify(key.value, depth + 1)}`;
+        return `${indent(depth)}+ ${node.key}: ${stringify(node.value, depth)}`;
       }
       default:
         return null;
