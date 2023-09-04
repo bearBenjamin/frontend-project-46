@@ -1,61 +1,83 @@
-/* eslint-disable consistent-return */
-/* eslint-disable array-callback-return */
 import _ from 'lodash';
 
-const replacer = '  ';
-const spaceCount = 2;
+const replacer = ' ';
+const spacesCount = 4;
+const keyOffset = 2;
+const closeBracketOffset = 4;
 
-const indent = (depth) => " ".repeat(spaceCount * depth - 2);
-
-const retreat = (depth) => {
-  const indent = spaceCount * depth;
-  const indentCloseBrace = indent - spaceCount;
-  const indents = {
-    numberIndents: replacer.repeat(indent - 1),
-    closeBrace: replacer.repeat(indentCloseBrace),
-  };
-  const {
-    numberIndents, closeBrace,
-  } = indents;
-  return [numberIndents, closeBrace];
-};
+const getIndents = (depth) => ({
+  open: replacer.repeat(spacesCount * depth - keyOffset),
+  close: replacer.repeat(spacesCount * depth - closeBracketOffset)
+});
 
 const stringify = (value, depth) => {
-  const [numberIndents, closeBrace] = retreat(depth);
+  const indents = getIndents(depth);
 
   if (!_.isObject(value)) return String(value);
 
-  const objectProperties = Object.keys(value).map((key) => `${indent(depth + 1)}  ${key}: ${stringify(value[key], depth + 1)}`);
-  return `{\n${objectProperties.join('\n')}\n${indent(depth)}  }`;
+  const properties = Object.keys(value).map((key) => `${indents.open}  ${key}: ${stringify(value[key], depth + 1)}`);
+  return `{\n${properties.join('\n')}\n${indents.close}}`;
 };
 
 const getStylishFormat = (diff, depth = 1) => {
-  const [numberIndents, closeBrace] = retreat(depth);
+  const indents = getIndents(depth);
 
-  const keys = diff.map((node) => {
-    switch (node.type) {
+  const keys = diff.map((key) => {
+    switch (key.type) {
       case 'node': {
-        return `${indent(depth)}  ${node.key}: ${getStylishFormat(node.children, depth + 1)}`;
+        return `${indents.open}  ${key.key}: ${getStylishFormat(key.children, depth + 1)}`;
       }
       case 'delete': {
-        return `${indent(depth)}- ${node.key}: ${stringify(node.value, depth)}`;
+        return `${indents.open}- ${key.key}: ${stringify(key.value, depth + 1)}`;
       }
       case 'unchanged': {
-        return `${indent(depth)}  ${node.key}: ${stringify(node.value, depth)}`;
+        return `${indents.open}  ${key.key}: ${stringify(key.value, depth + 1)}`;
       }
       case 'changed': {
-        const line1 = `${indent(depth)}- ${node.key}: ${stringify(node.value1, depth)}`;
-        const line2 = `${indent(depth)}+ ${node.key}: ${stringify(node.value2, depth)}`;
+        const line1 = `${indents.open}- ${key.key}: ${stringify(key.value1, depth + 1)}`;
+        const line2 = `${indents.open}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
         return `${line1}\n${line2}`;
       }
       case 'added': {
-        return `${indent(depth)}+ ${node.key}: ${stringify(node.value, depth)}`;
+        return `${indents.open}+ ${key.key}: ${stringify(key.value, depth + 1)}`;
       }
       default:
         return null;
     }
   });
-  return `{\n${keys.join('\n')}\n${closeBrace}}`;
+  return `{\n${keys.join('\n')}\n${indents.close}}`;
 };
 
 export default getStylishFormat;
+
+/* const iter = (node, depth) => {
+  const indents = getIndents(depth);
+  switch (node.type) {
+    case 'node': {
+      const children = node.children.map((node) => iter(node, depth + 1));
+      console.log(children)
+      return `${indents.open}  ${node.key}: {\n${children.join('\n')}\n${indents.close}}`;
+    }
+    case 'delete': {
+      return `${indents.open}- ${node.key}: ${stringify(node.value, depth + 1)}`;
+    }
+    case 'unchanged': {
+      return `${indents.open}  ${node.key}: ${stringify(node.value, depth + 1)}`;
+    }
+    case 'changed': {
+      const line1 = `${indents.open}- ${node.key}: ${stringify(node.value1, depth + 1)}`;
+      const line2 = `${indents.open}+ ${node.key}: ${stringify(node.value2, depth + 1)}`;
+      return `${line1}\n${line2}`;
+    }
+    case 'added': {
+      return `${indents.open}+ ${node.key}: ${stringify(node.value, depth + 1)}`;
+    }
+    default:
+      return null;
+  }
+};
+
+const getStylishFormat = (diff, depth = 1) => {
+  const keys = diff.map((node) => iter(node, depth));
+  return `{\n${keys.join('\n')}\n}`
+} */
