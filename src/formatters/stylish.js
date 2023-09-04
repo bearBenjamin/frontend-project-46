@@ -7,7 +7,7 @@ const closeBracketOffset = 4;
 
 const getIndents = (depth) => ({
   open: replacer.repeat(spacesCount * depth - keyOffset),
-  close: replacer.repeat(spacesCount * depth - closeBracketOffset)
+  close: replacer.repeat(spacesCount * depth - closeBracketOffset),
 });
 
 const stringify = (value, depth) => {
