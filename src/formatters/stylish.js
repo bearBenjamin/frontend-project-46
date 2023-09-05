@@ -3,11 +3,10 @@ import _ from 'lodash';
 const replacer = ' ';
 const spacesCount = 4;
 const keyOffset = 2;
-const closeBracketOffset = 4;
 
 const getIndents = (depth) => ({
   open: replacer.repeat(spacesCount * depth - keyOffset),
-  close: replacer.repeat(spacesCount * depth - closeBracketOffset),
+  close: replacer.repeat(spacesCount * depth - spacesCount),
 });
 
 const stringify = (value, depth) => {
@@ -19,44 +18,13 @@ const stringify = (value, depth) => {
   return `{\n${properties.join('\n')}\n${indents.close}}`;
 };
 
-const getStylishFormat = (diff, depth = 1) => {
+const iter = (node, depth) => {
   const indents = getIndents(depth);
 
-  const keys = diff.map((key) => {
-    switch (key.type) {
-      case 'node': {
-        return `${indents.open}  ${key.key}: ${getStylishFormat(key.children, depth + 1)}`;
-      }
-      case 'delete': {
-        return `${indents.open}- ${key.key}: ${stringify(key.value, depth + 1)}`;
-      }
-      case 'unchanged': {
-        return `${indents.open}  ${key.key}: ${stringify(key.value, depth + 1)}`;
-      }
-      case 'changed': {
-        const line1 = `${indents.open}- ${key.key}: ${stringify(key.value1, depth + 1)}`;
-        const line2 = `${indents.open}+ ${key.key}: ${stringify(key.value2, depth + 1)}`;
-        return `${line1}\n${line2}`;
-      }
-      case 'added': {
-        return `${indents.open}+ ${key.key}: ${stringify(key.value, depth + 1)}`;
-      }
-      default:
-        return null;
-    }
-  });
-  return `{\n${keys.join('\n')}\n${indents.close}}`;
-};
-
-export default getStylishFormat;
-
-/* const iter = (node, depth) => {
-  const indents = getIndents(depth);
   switch (node.type) {
     case 'node': {
-      const children = node.children.map((node) => iter(node, depth + 1));
-      console.log(children)
-      return `${indents.open}  ${node.key}: {\n${children.join('\n')}\n${indents.close}}`;
+      const childrens = node.children.map((node) => iter(node, depth + 1));
+      return `${indents.open}  ${node.key}: {\n${childrens.join('\n')}\n${indents.close}    }`;
     }
     case 'delete': {
       return `${indents.open}- ${node.key}: ${stringify(node.value, depth + 1)}`;
@@ -78,6 +46,8 @@ export default getStylishFormat;
 };
 
 const getStylishFormat = (diff, depth = 1) => {
-  const keys = diff.map((node) => iter(node, depth));
-  return `{\n${keys.join('\n')}\n}`
-} */
+  const nodes = diff.map((node) => iter(node, depth));
+  return `{\n${nodes.join('\n')}\n}`
+}
+
+export default getStylishFormat;

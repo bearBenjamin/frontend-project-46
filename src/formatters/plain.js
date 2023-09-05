@@ -1,30 +1,28 @@
-/* eslint-disable consistent-return */
-/* eslint-disable array-callback-return */
 import _ from 'lodash';
 
 const stringify = (value) => {
   if (_.isObject(value)) return '[complex value]';
   if (typeof value === 'string') return `'${value}'`;
-  return value;
+  return String(value);
 };
 
 const getPlainFormat = (diff) => {
   const iter = (node, parents) => {
-    const keys = node.flatMap((key) => {
-      const parent = [...parents, `${key.key}`];
+    const nodes = node.flatMap((node) => {
+      const parent = [...parents, `${node.key}`];
       const pathNameKey = parent.join('.');
-      switch (key.type) {
+      switch (node.type) {
         case 'node': {
-          return `${iter(key.children, parent)}`;
+          return `${iter(node.children, parent)}`;
         }
         case 'delete': {
           return `Property '${pathNameKey}' was removed`;
         }
         case 'changed': {
-          return `Property '${pathNameKey}' was updated. From ${stringify(key.value1)} to ${stringify(key.value2)}`;
+          return `Property '${pathNameKey}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
         }
         case 'added': {
-          return `Property '${pathNameKey}' was added with value: ${stringify(key.value)}`;
+          return `Property '${pathNameKey}' was added with value: ${stringify(node.value)}`;
         }
         case 'unchanged': {
           return [];
@@ -33,7 +31,7 @@ const getPlainFormat = (diff) => {
           return null;
       }
     });
-    return `${keys.join('\n')}`;
+    return `${nodes.join('\n')}`;
   };
   return iter(diff, []);
 };
