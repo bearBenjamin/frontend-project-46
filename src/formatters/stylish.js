@@ -23,7 +23,7 @@ const iter = (node, depth) => {
 
   switch (node.type) {
     case 'node': {
-      const childrens = node.children.map((node) => iter(node, depth + 1));
+      const childrens = node.children.map((nest) => iter(nest, depth + 1));
       return `${indents.open}  ${node.key}: {\n${childrens.join('\n')}\n${indents.close}    }`;
     }
     case 'delete': {
@@ -47,7 +47,7 @@ const iter = (node, depth) => {
 
 const getStylishFormat = (diff, depth = 1) => {
   const nodes = diff.map((node) => iter(node, depth));
-  return `{\n${nodes.join('\n')}\n}`
-}
+  return `{\n${nodes.join('\n')}\n}`;
+};
 
 export default getStylishFormat;

@@ -8,21 +8,21 @@ const stringify = (value) => {
 
 const getPlainFormat = (diff) => {
   const iter = (node, parents) => {
-    const nodes = node.flatMap((node) => {
-      const parent = [...parents, `${node.key}`];
+    const nodes = node.flatMap((nest) => {
+      const parent = [...parents, `${nest.key}`];
       const pathNameKey = parent.join('.');
-      switch (node.type) {
+      switch (nest.type) {
         case 'node': {
-          return `${iter(node.children, parent)}`;
+          return `${iter(nest.children, parent)}`;
         }
         case 'delete': {
           return `Property '${pathNameKey}' was removed`;
         }
         case 'changed': {
-          return `Property '${pathNameKey}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
+          return `Property '${pathNameKey}' was updated. From ${stringify(nest.value1)} to ${stringify(nest.value2)}`;
         }
         case 'added': {
-          return `Property '${pathNameKey}' was added with value: ${stringify(node.value)}`;
+          return `Property '${pathNameKey}' was added with value: ${stringify(nest.value)}`;
         }
         case 'unchanged': {
           return [];
